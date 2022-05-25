@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/dialog_add_title_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Adicionar bailarino"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/dialog_add_close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_baseline_close_24"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_add_actor_name_il"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nome"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_close_btn">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_add_actor_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/dialog_add_color_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cor:"
+        android:textColor="@color/black"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_actor_name_il"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <RadioGroup
+        android:id="@+id/dialog_add_color_rd_gp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_color_tv"
+        app:layout_constraintStart_toStartOf="parent">
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/dialog_add_color_1_rd_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Azul"/>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/dialog_add_color_2_rd_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vermelho"/>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/dialog_add_color_3_rd_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Verde"/>
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_add_done_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Adicionar"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_add_color_rd_gp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
