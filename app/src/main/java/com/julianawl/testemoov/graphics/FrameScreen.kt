@@ -1,7 +1,7 @@
-package com.julianawl.testemoov.ui
+package com.julianawl.testemoov.graphics
 
-import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
@@ -9,21 +9,23 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.FitViewport
-import com.julianawl.testemoov.actor.ActorManager
-import com.julianawl.testemoov.actor.MyActor
-import com.julianawl.testemoov.background.Background
+import com.julianawl.testemoov.graphics.actor.ActorManager
+import com.julianawl.testemoov.graphics.actor.MyActor
+import com.julianawl.testemoov.graphics.background.Background
+import ktx.app.KtxScreen
 
-class MyGame : ApplicationAdapter() {
+class FrameScreen: KtxScreen {
+
     private lateinit var background: Background
     private lateinit var renderer: ShapeRenderer
     private lateinit var backgroundTexture: Texture
-    private var width: Float = 0f
-    private var height: Float = 0f
+    var width: Float = 0f
+    var height: Float = 0f
     private val actorManager by lazy {
         ActorManager(background)
     }
 
-    override fun create() {
+    override fun show() {
         renderer = ShapeRenderer()
         renderer.setAutoShapeType(true)
         background = Background(FitViewport(width, height))
@@ -53,11 +55,6 @@ class MyGame : ApplicationAdapter() {
 
     fun getActors(): Array<Actor>? {
         return background.actors
-    }
-
-    fun getDimensions(width: Float, height: Float){
-        this.width = width
-        this.height = height
     }
 
     fun fixActorAtPosition(actorName: String): Int{
@@ -100,7 +97,7 @@ class MyGame : ApplicationAdapter() {
 
     }
 
-    override fun render() {
+    override fun render(delta: Float) {
         Gdx.gl.glClearColor(0.172f, 0.184f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         background.batch.begin()

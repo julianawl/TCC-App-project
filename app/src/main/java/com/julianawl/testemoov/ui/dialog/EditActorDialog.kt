@@ -65,9 +65,9 @@ class EditActorDialog: DialogFragment() {
         val checkedId = colorRadioGroup.checkedRadioButtonId
         var color: Color = Color.CLEAR
         when (checkedId) {
-            R.id.dialog_add_color_1_rd_btn -> color = Color.BLUE
-            R.id.dialog_add_color_2_rd_btn -> color = Color.RED
-            R.id.dialog_add_color_3_rd_btn -> color = Color.GREEN
+            R.id.dialog_edit_color_1_rd_btn -> color = Color.BLUE
+            R.id.dialog_edit_color_2_rd_btn -> color = Color.RED
+            R.id.dialog_edit_color_3_rd_btn -> color = Color.GREEN
         }
         return color
     }

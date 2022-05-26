@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.actor
+package com.julianawl.testemoov.graphics.actor
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.julianawl.testemoov.background.Background
+import com.julianawl.testemoov.graphics.background.Background
 
 
 class ActorManager(private val background: Background) {

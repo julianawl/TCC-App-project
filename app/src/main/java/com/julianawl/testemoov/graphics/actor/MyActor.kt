@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.actor
+package com.julianawl.testemoov.graphics.actor
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group

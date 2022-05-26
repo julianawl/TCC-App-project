@@ -1,12 +1,11 @@
-package com.julianawl.testemoov.background
+package com.julianawl.testemoov.graphics.background
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.julianawl.testemoov.actor.MyActor
+import com.julianawl.testemoov.graphics.actor.MyActor
 
 class Background(
     viewport: Viewport
