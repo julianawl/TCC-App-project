@@ -21,7 +21,8 @@ class CompositionActivity : AppCompatActivity(), AndroidFragmentApplication.Call
         val libgdxFragment = CompositionFragment()
         val width = intent.getFloatExtra("width", 0f)
         val height = intent.getFloatExtra("height", 0f)
-        libgdxFragment.arguments = bundleOf(Pair("width", width), Pair("height", height))
+        val name = intent.getStringExtra("name")
+        libgdxFragment.arguments = bundleOf(Pair("width", width), Pair("height", height), Pair("name", name))
         supportFragmentManager.beginTransaction().add(R.id.composition_view, libgdxFragment)
             .commit()
     }

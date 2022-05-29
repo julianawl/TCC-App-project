@@ -17,6 +17,7 @@ class NewCompositionDialog : DialogFragment() {
     private val createBtn by lazy { binding.dialogNewCompCreateBtn }
     private val widthEditText by lazy { binding.dialogNewCompWidthEt }
     private val heightEditText by lazy { binding.dialogNewCompHeightEt }
+    private val nameEditText by lazy { binding.dialogNewCompNameEt }
 
     private var listener: NewCompositionListener? = null
 
@@ -27,7 +28,7 @@ class NewCompositionDialog : DialogFragment() {
         this.createBtn.setOnClickListener {
             when {
                 this.widthEditText.text.toString().isEmpty() && this.heightEditText.text.toString()
-                    .isEmpty() -> {
+                    .isEmpty() && this.nameEditText.text.toString().isEmpty() -> {
                     Toast.makeText(
                         requireContext(),
                         "Todos os campos são obrigatórios",
@@ -40,10 +41,18 @@ class NewCompositionDialog : DialogFragment() {
                 this.heightEditText.text.toString().isEmpty() -> {
                     Toast.makeText(requireContext(), "Informe a altura", Toast.LENGTH_SHORT).show()
                 }
+                this.nameEditText.text.toString().isEmpty() -> {
+                    Toast.makeText(
+                        requireContext(),
+                        "Informe um nome para a composição",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 else -> {
                     this.listener?.onClickCreateComposition(
                         this.widthEditText.text.toString().toFloat(),
-                        this.heightEditText.text.toString().toFloat()
+                        this.heightEditText.text.toString().toFloat(),
+                        this.nameEditText.text.toString()
                     )
                     dismiss()
                 }
@@ -59,6 +68,6 @@ class NewCompositionDialog : DialogFragment() {
     }
 
     interface NewCompositionListener {
-        fun onClickCreateComposition(width: Float, height: Float)
+        fun onClickCreateComposition(width: Float, height: Float, name: String)
     }
 }

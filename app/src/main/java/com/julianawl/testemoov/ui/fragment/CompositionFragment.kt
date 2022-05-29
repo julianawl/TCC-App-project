@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.badlogic.gdx.graphics.Color
 import com.julianawl.testemoov.R
-import com.julianawl.testemoov.graphics.actor.model.ActorModel
+import com.julianawl.testemoov.graphics.model.ActorName
 import com.julianawl.testemoov.graphics.BaseGameClass
 import com.julianawl.testemoov.ui.dialog.AddActorDialog
 import com.julianawl.testemoov.ui.dialog.EditActorDialog
@@ -32,8 +32,10 @@ class CompositionFragment : AndroidFragmentApplication() {
     ): View? {
         val width = arguments?.getFloat("width")!!
         val height = arguments?.getFloat("height")!!
+        val name = arguments?.getString("name")!!
         return initializeForView(base.also {
             it.setDimensions(width, height)
+            it.setCompositionName(name)
         })
     }
 
@@ -63,8 +65,9 @@ class CompositionFragment : AndroidFragmentApplication() {
     }
 
     private fun onClickNextFrameBtn(nextFrameBtn: AppCompatImageButton) {
-        //salvar frame atual
-        //ir para o próximo frame
+        nextFrameBtn.setOnClickListener {
+            base.nextScene()
+        }
     }
 
     private fun onClickAddMoveBtn(moveActorBtn: AppCompatImageButton) {
@@ -93,7 +96,7 @@ class CompositionFragment : AndroidFragmentApplication() {
                 getActorsDialog = GetActorsDialog(getActorsList())
                 getActorsDialog?.show(it.supportFragmentManager, "get actors dialog")
                 getActorsDialog?.onItemClickListener = { actor ->
-                    fixed = base.fixActorAtPosition(actor.name)
+                    fixed = base.setInitialPosition(actor.name)
                     getActorsDialog?.dismiss()
                 }
             }
@@ -161,22 +164,22 @@ class CompositionFragment : AndroidFragmentApplication() {
             } else {
                 playBtn.visibility = View.GONE
                 pauseBtn.visibility = View.VISIBLE
-                base.playFrame()
+                base.playScene()
                 pauseBtn.setOnClickListener {
                     playBtn.visibility = View.VISIBLE
                     pauseBtn.visibility = View.GONE
-                    base.pauseFrame()
+                    base.stopScene()
                 }
             }
         }
     }
 
-    private fun getActorsList(): MutableList<ActorModel> {
+    private fun getActorsList(): MutableList<ActorName> {
         val actors = base.getActors()
-        val actorsList: MutableList<ActorModel> = mutableListOf()
+        val actorsList: MutableList<ActorName> = mutableListOf()
         if (!actors!!.isEmpty) {
             for (actor in actors) {
-                actorsList.add(ActorModel(actor.name))
+                actorsList.add(ActorName(actor.name))
             }
         }
         return actorsList

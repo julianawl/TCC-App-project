@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.julianawl.testemoov.graphics.background.Background
 
-
 class ActorManager(private val background: Background) {
 
     private val actorSize = 100f
@@ -66,8 +65,29 @@ class ActorManager(private val background: Background) {
         val actorLabel = Label(
             name, Label.LabelStyle(font, Color.WHITE)
         )
+        actorShape.color = color
         actorLabel.name = "$name Label"
         val actor = MyActor(setActorInitialPosition().x, setActorInitialPosition().y)
+        actor.addActor(actorShape)
+        actor.addActor(actorLabel)
+        actor.name = name
+        return actor
+    }
+
+    fun addActorWithColor(color: Color, shape: String, name: String, position: Vector2): MyActor {
+        val actorShape = ImageActor(
+            actorSize,
+            actorSize,
+            createActorTexture(color, shape)
+        )
+        actorShape.name = "$name Image"
+        val font = BitmapFont(Gdx.files.internal("fonts/roboto_med_italic.fnt"))
+        val actorLabel = Label(
+            name, Label.LabelStyle(font, Color.WHITE)
+        )
+        actorShape.color = color
+        actorLabel.name = "$name Label"
+        val actor = MyActor(position.x, position.y)
         actor.addActor(actorShape)
         actor.addActor(actorLabel)
         actor.name = name
@@ -87,6 +107,7 @@ class ActorManager(private val background: Background) {
         myActor.name = name
         val label = myActor.findActor<Label>("$nameOld Label")
         val image = myActor.findActor<ImageActor>("$nameOld Image")
+        image.color = color
         image.changeTexture(createActorTexture(color, shape))
         label.setText(name)
     }

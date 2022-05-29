@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.julianawl.testemoov.graphics.actor.model.ActorModel
+import com.julianawl.testemoov.graphics.model.ActorName
 
 class GetActorsAdapter(
-    private val actors: MutableList<ActorModel> = mutableListOf(),
-    var onActorClickListener: (actor: ActorModel) -> Unit = {}
+    private val actors: MutableList<ActorName> = mutableListOf(),
+    var onActorClickListener: (actor: ActorName) -> Unit = {}
 ) : RecyclerView.Adapter<GetActorsAdapter.GetActorsViewHolder>() {
 
 
@@ -26,7 +26,7 @@ class GetActorsAdapter(
 
     override fun getItemCount(): Int = actors.size
 
-    fun append(actors: List<ActorModel>) {
+    fun append(actors: List<ActorName>) {
         this.actors.clear()
         this.actors.addAll(actors)
         notifyDataSetChanged()
@@ -34,12 +34,12 @@ class GetActorsAdapter(
 
     inner class GetActorsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val actorName: TextView = itemView.findViewById(android.R.id.text1)
-        fun bind(actor: ActorModel) {
+        fun bind(actor: ActorName) {
             actorName.text = actor.name
             initActions(actor)
         }
 
-        private fun initActions(actor: ActorModel) {
+        private fun initActions(actor: ActorName) {
             actorName.setOnClickListener {
                 onActorClickListener(actor)
             }
