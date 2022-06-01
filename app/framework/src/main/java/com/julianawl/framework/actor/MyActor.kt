@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.graphics.actor
+package com.julianawl.framework.actor
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Group
@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener
 class MyActor(actorX: Float, actorY: Float) : Group() {
 
     private var listenerIsOn = true
-    val initialPosition by lazy { Vector2(x,y) }
-    val finalPosition by lazy { Vector2(x,y) }
+    val initialPosition by lazy { Vector2(x, y) }
+    val finalPosition by lazy { Vector2(x, y) }
 
     init {
         x = actorX
@@ -25,7 +25,7 @@ class MyActor(actorX: Float, actorY: Float) : Group() {
         })
     }
 
-    fun fixActorAtPosition() : Int{
+    fun fixActorAtPosition(): Int {
         return if (listenerIsOn) {
             touchable = Touchable.disabled
             initialPosition.set(x, y)

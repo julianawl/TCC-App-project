@@ -1,21 +1,22 @@
-package com.julianawl.testemoov.graphics
+package com.julianawl.framework.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.viewport.FitViewport
-import com.julianawl.testemoov.graphics.actor.ActorManager
-import com.julianawl.testemoov.graphics.actor.MyActor
-import com.julianawl.testemoov.graphics.background.Background
-import com.julianawl.testemoov.graphics.model.ActorModel
+import com.julianawl.framework.actor.ActorManager
+import com.julianawl.framework.actor.ImageActor
+import com.julianawl.framework.actor.MyActor
+import com.julianawl.framework.background.Background
+import com.julianawl.framework.model.ActorModel
 import ktx.app.KtxScreen
 
-class SceneScreen : KtxScreen {
+class SceneScreen() : KtxScreen {
 
     private val background by lazy {
         val result = Background(FitViewport(width, height))
@@ -25,12 +26,12 @@ class SceneScreen : KtxScreen {
     private val backgroundTexture by lazy { background.createBackgroundTexture() }
     var width: Float = 0f
     var height: Float = 0f
+    var actionDuration: Float = 0f
     private val actorManager by lazy {
         ActorManager(background)
     }
 
-    override fun show() {
-    }
+    override fun show() {}
 
     fun addActor(name: String, color: Color, shape: String) {
         Gdx.app.postRunnable {
@@ -44,12 +45,12 @@ class SceneScreen : KtxScreen {
         }
     }
 
-    fun addActorAtPosition(name: String, color: Color, shape: String, position: Vector2) {
+    fun addActorAtPosition(name: String, texture: Texture, position: Vector2) {
+        removeActor(name)
         Gdx.app.postRunnable {
             background.addMyActor(
-                actorManager.addActorWithColor(
-                    color,
-                    shape,
+                actorManager.addActorWithTexture(
+                    texture,
                     name,
                     position
                 )
@@ -82,14 +83,19 @@ class SceneScreen : KtxScreen {
     fun stopMovement(actorName: String) {
         val actor = background.root.findActor<MyActor>(actorName)
         actor.stopMovement()
-        Gdx.app.postRunnable { actorManager.drawLine(actor.initialPosition, actor.finalPosition) }
     }
 
     fun playScene() {
         for (actor in background.actors) {
             val myActor = background.root.findActor<MyActor>(actor.name)
             with(myActor) {
-                addAction(actorManager.addMovementAsAction(this, 1f))
+                addAction(
+                    actorManager.addMovementAsAction(
+                        this,
+                        actionDuration,
+                        Interpolation.linear
+                    )
+                )
             }
         }
     }
@@ -102,12 +108,15 @@ class SceneScreen : KtxScreen {
     }
 
     fun setActorsList(): MutableList<ActorModel> {
-        val sceneActors = mutableListOf<ActorModel>()
+        val sceneActors = arrayListOf<ActorModel>()
         getActors()?.forEach { actor ->
+            val myActor = background.root?.findActor<MyActor>(actor.name)
+            val imageActor = myActor?.findActor<ImageActor>("${actor.name} Image")
             sceneActors.add(
                 ActorModel(
                     actor.name,
                     actor.color,
+                    imageActor?.getTexture(),
                     getActorInitialPosition(background.root.findActor(actor.name)),
                     getActorFinalPosition(background.root.findActor(actor.name))
                 )

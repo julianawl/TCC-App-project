@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TesteMoov</string>
+    <string name="toast_empty_list">Lista de bailarinos vazia</string>
+    <string name="toast_fix_actors">É necessário fixar os atores primeiro</string>
+    <string name="edit_actor_dialog_tag">edit actor dialog</string>
+    <string name="get_actors_dialog_tag">get actors dialog</string>
+    <string name="add_actor_dialog_tag">add actor dialog</string>
+    <string name="new_composition_dialog_tag">new composition dialog</string>
 </resources>

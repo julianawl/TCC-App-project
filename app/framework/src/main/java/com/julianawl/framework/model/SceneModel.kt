@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.graphics.model
+package com.julianawl.framework.model
 
 data class SceneModel(
     val id: Int,

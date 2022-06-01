@@ -9,9 +9,9 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.os.bundleOf
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.badlogic.gdx.graphics.Color
-import com.julianawl.testemoov.R
-import com.julianawl.testemoov.graphics.model.ActorName
+import com.julianawl.testemoov.*
 import com.julianawl.testemoov.graphics.BaseGameClass
+import com.julianawl.testemoov.ui.ActorName
 import com.julianawl.testemoov.ui.dialog.AddActorDialog
 import com.julianawl.testemoov.ui.dialog.EditActorDialog
 import com.julianawl.testemoov.ui.dialog.GetActorsDialog
@@ -30,12 +30,15 @@ class CompositionFragment : AndroidFragmentApplication() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val width = arguments?.getFloat("width")!!
-        val height = arguments?.getFloat("height")!!
-        val name = arguments?.getString("name")!!
+        val width = arguments?.getFloat(WIDTH_KEY)!!
+        val height = arguments?.getFloat(HEIGHT_KEY)!!
+        val name = arguments?.getString(NAME_KEY)!!
+        val prefs = arguments?.getString(PREFERENCES_KEY)!!
+        val compositionId = arguments?.getInt(ID_KEY)!!
         return initializeForView(base.also {
             it.setDimensions(width, height)
             it.setCompositionName(name)
+            it.getPreferences(prefs, compositionId)
         })
     }
 
@@ -47,7 +50,6 @@ class CompositionFragment : AndroidFragmentApplication() {
             activity?.findViewById<AppCompatImageButton>(R.id.composition_edit_actor_btn)
         onClickEditBtn(editActorBtn!!)
 
-        //aparece apenas na primeira cena
         val fixActorBtn =
             activity?.findViewById<AppCompatImageButton>(R.id.composition_fix_actors_btn)
         onClickFixBtn(fixActorBtn!!)
@@ -57,10 +59,12 @@ class CompositionFragment : AndroidFragmentApplication() {
         onClickAddMoveBtn(moveActorBtn!!)
 
         val playBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_play_frame_btn)
-        val pauseBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_pause_frame_btn)
+        val pauseBtn =
+            activity?.findViewById<AppCompatImageButton>(R.id.composition_pause_frame_btn)
         onClickPlayBtn(playBtn!!, pauseBtn!!)
 
-        val nextFrameBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_next_frame_btn)
+        val nextFrameBtn =
+            activity?.findViewById<AppCompatImageButton>(R.id.composition_next_frame_btn)
         onClickNextFrameBtn(nextFrameBtn!!)
     }
 
@@ -76,7 +80,10 @@ class CompositionFragment : AndroidFragmentApplication() {
                 activity?.findViewById<AppCompatImageButton>(R.id.composition_stop_move_btn)
             activity?.let {
                 getActorsDialog = GetActorsDialog(getActorsList())
-                getActorsDialog?.show(it.supportFragmentManager, "get actors dialog")
+                getActorsDialog?.show(
+                    it.supportFragmentManager,
+                    getString(R.string.get_actors_dialog_tag)
+                )
                 getActorsDialog?.onItemClickListener = { actor ->
                     base.addMovement(actor.name)
                     getActorsDialog?.dismiss()
@@ -94,7 +101,10 @@ class CompositionFragment : AndroidFragmentApplication() {
         fixActorBtn.setOnClickListener {
             activity?.let {
                 getActorsDialog = GetActorsDialog(getActorsList())
-                getActorsDialog?.show(it.supportFragmentManager, "get actors dialog")
+                getActorsDialog?.show(
+                    it.supportFragmentManager,
+                    getString(R.string.get_actors_dialog_tag)
+                )
                 getActorsDialog?.onItemClickListener = { actor ->
                     fixed = base.setInitialPosition(actor.name)
                     getActorsDialog?.dismiss()
@@ -107,7 +117,10 @@ class CompositionFragment : AndroidFragmentApplication() {
         addBtn.setOnClickListener {
             activity?.let {
                 addActorDialog = AddActorDialog()
-                addActorDialog?.show(it.supportFragmentManager, "add actor dialog")
+                addActorDialog?.show(
+                    it.supportFragmentManager,
+                    getString(R.string.add_actor_dialog_tag)
+                )
                 addActorDialog?.addListener(object : AddActorDialog.AddDialogListener {
                     override fun onClickAddActor(name: String, color: Color, shape: String) {
                         base.addActor(name, color, shape)
@@ -122,14 +135,17 @@ class CompositionFragment : AndroidFragmentApplication() {
             if (getActorsList().isNotEmpty()) {
                 activity?.let {
                     getActorsDialog = GetActorsDialog(getActorsList())
-                    getActorsDialog?.show(it.supportFragmentManager, "get actors dialog")
+                    getActorsDialog?.show(
+                        it.supportFragmentManager,
+                        getString(R.string.get_actors_dialog_tag)
+                    )
                     getActorsDialog?.onItemClickListener = { actor ->
                         editActorDialog = EditActorDialog()
-                        editActorDialog?.arguments = bundleOf(Pair("Actor", actor.name))
+                        editActorDialog?.arguments = bundleOf(Pair(ACTOR_KEY, actor.name))
                         activity?.supportFragmentManager?.let { it ->
                             editActorDialog!!.show(
                                 it,
-                                "edit actor dialog"
+                                getString(R.string.edit_actor_dialog_tag)
                             )
                         }
                         editActorDialog?.editListener(object : EditActorDialog.EditDialogListener {
@@ -151,16 +167,24 @@ class CompositionFragment : AndroidFragmentApplication() {
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "Lista de bailarinos vazia", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.toast_empty_list),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
     }
 
-    private fun onClickPlayBtn(playBtn: AppCompatImageButton, pauseBtn: AppCompatImageButton){
+    private fun onClickPlayBtn(playBtn: AppCompatImageButton, pauseBtn: AppCompatImageButton) {
         playBtn.setOnClickListener {
-            if(fixed == 0 || fixed == -1){
-                Toast.makeText(requireContext(), "É necessário fixar os atores primeiro", Toast.LENGTH_SHORT).show()
+            if (fixed == 0 || fixed == -1) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.toast_fix_actors),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 playBtn.visibility = View.GONE
                 pauseBtn.visibility = View.VISIBLE

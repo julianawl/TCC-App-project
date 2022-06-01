@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.graphics.model
+package com.julianawl.framework.model
 
 data class SetModel(
     val id: Int,
@@ -6,8 +6,4 @@ data class SetModel(
     val stageWidth: Float,
     val stageHeight: Float,
     val scenes: MutableList<SceneModel>?
-)
-
-data class SetList(
-    val setList: MutableList<SetModel>?
 )

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.julianawl.testemoov.graphics.model.ActorName
+import com.julianawl.testemoov.ui.ActorName
 import com.julianawl.testemoov.databinding.GetActorsDialogBinding
 import com.julianawl.testemoov.ui.dialog.adapter.GetActorsAdapter
 

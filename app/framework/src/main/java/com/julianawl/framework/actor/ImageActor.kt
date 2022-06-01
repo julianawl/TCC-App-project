@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.graphics.actor
+package com.julianawl.framework.actor
 
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
@@ -18,6 +18,8 @@ class ImageActor(
     fun changeTexture(texture: Texture) {
         this.texture = texture
     }
+
+    fun getTexture(): Texture = this.texture
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
         batch!!.draw(texture, x, y, width, height)

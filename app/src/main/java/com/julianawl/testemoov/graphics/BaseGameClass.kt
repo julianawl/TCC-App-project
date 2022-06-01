@@ -3,9 +3,10 @@ package com.julianawl.testemoov.graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Array
+import com.julianawl.framework.model.SceneModel
+import com.julianawl.framework.model.SetList
+import com.julianawl.framework.screen.SceneScreen
 import com.julianawl.testemoov.ModelPreferencesManager
-import com.julianawl.testemoov.graphics.model.SceneModel
-import com.julianawl.testemoov.graphics.model.SetModel
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 
@@ -13,6 +14,8 @@ class BaseGameClass : KtxGame<KtxScreen>() {
     private val screen = SceneScreen()
     private var scenesCount = 1
     private lateinit var setName: String
+    private lateinit var prefs: String
+    private var setId: Int = 0
 
     override fun create() {
         addScreen(screen)
@@ -44,6 +47,10 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         this.setName = name
     }
 
+    fun setActionDuration() {
+        screen.actionDuration = 1f
+    }
+
     fun setInitialPosition(actorName: String): Int {
         return screen.fixActorAtPosition(actorName)
     }
@@ -70,23 +77,34 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         buildNewScreen()
     }
 
+    fun getPreferences(prefs: String, id: Int) {
+        this.prefs = prefs
+        this.setId = id
+    }
+
     private fun buildNewScreen() {
         setScreen<SceneScreen>()
-        val scenes = ModelPreferencesManager.get<SetModel>(setName)?.scenes
-        val lastScene = scenes?.last()
-        lastScene?.actors?.forEach { actor ->
-            screen.addActorAtPosition(actor.name, actor.color, "circle", actor.finalPosition!!)
+        if (scenesCount > 1) {
+            val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
+            val scenes = setList?.find { setModel -> setModel.name == setName }?.scenes
+            val lastScene = scenes?.last()
+            lastScene?.actors?.forEach { actor ->
+                screen.addActorAtPosition(actor.name, actor.texture!!, actor.finalPosition!!)
+            }
         }
     }
 
     private fun saveScene() {
-        val set = ModelPreferencesManager.get<SetModel>(setName)
+        val composition = ModelPreferencesManager.get<SetList>(prefs)
+        val setList = composition?.setList
+        val set = setList?.first { it.id == setId }
         if (scenesCount == 1) {
             set?.scenes?.clear()
             set?.scenes?.add(SceneModel(scenesCount, screen.setActorsList()))
         } else {
             set?.scenes?.add(SceneModel(scenesCount, screen.setActorsList()))
         }
-        ModelPreferencesManager.put(set, setName)
+        composition?.setList?.set(setId - 1, set!!)
+        ModelPreferencesManager.put(composition, prefs)
     }
 }
