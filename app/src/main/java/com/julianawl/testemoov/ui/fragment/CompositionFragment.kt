@@ -1,5 +1,6 @@
 package com.julianawl.testemoov.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,12 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.os.bundleOf
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.badlogic.gdx.graphics.Color
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textview.MaterialTextView
 import com.julianawl.testemoov.*
+import com.julianawl.testemoov.data.ActorName
 import com.julianawl.testemoov.graphics.BaseGameClass
-import com.julianawl.testemoov.ui.ActorName
+import com.julianawl.testemoov.ui.activity.MainActivity
 import com.julianawl.testemoov.ui.dialog.AddActorDialog
 import com.julianawl.testemoov.ui.dialog.EditActorDialog
 import com.julianawl.testemoov.ui.dialog.GetActorsDialog
@@ -38,39 +42,87 @@ class CompositionFragment : AndroidFragmentApplication() {
         return initializeForView(base.also {
             it.setDimensions(width, height)
             it.setCompositionName(name)
-            it.getPreferences(prefs, compositionId)
+            it.setPreferences(prefs, compositionId)
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val addBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_add_actor_btn)
-        onClickAddBtn(addBtn!!)
         val editActorBtn =
             activity?.findViewById<AppCompatImageButton>(R.id.composition_edit_actor_btn)
-        onClickEditBtn(editActorBtn!!)
-
         val fixActorBtn =
             activity?.findViewById<AppCompatImageButton>(R.id.composition_fix_actors_btn)
-        onClickFixBtn(fixActorBtn!!)
-
         val moveActorBtn =
             activity?.findViewById<AppCompatImageButton>(R.id.composition_add_move_btn)
-        onClickAddMoveBtn(moveActorBtn!!)
-
-        val playBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_play_frame_btn)
+        val playBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_play_scene_btn)
         val pauseBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_pause_frame_btn)
-        onClickPlayBtn(playBtn!!, pauseBtn!!)
+            activity?.findViewById<AppCompatImageButton>(R.id.composition_pause_scene_btn)
+        val sceneCountTv = activity?.findViewById<MaterialTextView>(R.id.composition_scene_count_tv)
+        val backSceneBtn =
+            activity?.findViewById<AppCompatImageButton>(R.id.composition_back_scene_btn)
+        val nextSceneBtn =
+            activity?.findViewById<AppCompatImageButton>(R.id.composition_next_scene_btn)
+        val saveBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_save_btn)
 
-        val nextFrameBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_next_frame_btn)
-        onClickNextFrameBtn(nextFrameBtn!!)
+        onClickAddBtn(addBtn!!)
+        onClickEditBtn(editActorBtn!!)
+        onClickFixBtn(fixActorBtn!!)
+        onClickAddMoveBtn(moveActorBtn!!)
+        onClickPlayBtn(playBtn!!, pauseBtn!!)
+        onClickBackSceneBtn(backSceneBtn!!, sceneCountTv!!)
+        onClickNextSceneBtn(nextSceneBtn!!, sceneCountTv)
+        onClickSaveBtn(saveBtn!!)
     }
 
-    private fun onClickNextFrameBtn(nextFrameBtn: AppCompatImageButton) {
-        nextFrameBtn.setOnClickListener {
-            base.nextScene()
+    private fun onClickSaveBtn(saveBtn: AppCompatImageButton) {
+        saveBtn.setOnClickListener {
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+            dialog.setMessage(getString(R.string.dialog_save_message))
+                .setTitle(getString(R.string.dialog_save_title))
+                .setPositiveButton(getString(R.string.dialog_save_btn)) { _, _ ->
+                    base.nextScene()
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                .setNegativeButton(getString(R.string.dialog_cancel_btn)) { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                }
+            dialog.show()
+        }
+    }
+
+    private fun onClickBackSceneBtn(
+        backSceneBtn: AppCompatImageButton,
+        sceneCountTv: MaterialTextView
+    ) {
+        backSceneBtn.setOnClickListener {
+            val sceneCount = base.backScene()
+            sceneCountTv.text = sceneCount.toString()
+            if (sceneCount <= 1) Toast.makeText(
+                requireContext(),
+                getString(R.string.toast_first_scene),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun onClickNextSceneBtn(
+        nextSceneBtn: AppCompatImageButton,
+        sceneCountTv: MaterialTextView
+    ) {
+        nextSceneBtn.setOnClickListener {
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+            dialog.setMessage(getString(R.string.dialog_next_scene_message))
+                .setTitle(getString(R.string.new_scene_dialog_title))
+                .setPositiveButton(getString(R.string.create_add_btn_dialog)) { _, _ ->
+                    val sceneCount = base.nextScene()
+                    sceneCountTv.text = sceneCount.toString()
+                }
+                .setNegativeButton(getString(R.string.dialog_cancel_btn)) { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                }
+            dialog.show()
         }
     }
 

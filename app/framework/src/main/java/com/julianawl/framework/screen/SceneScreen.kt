@@ -1,9 +1,10 @@
 package com.julianawl.framework.screen
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -15,8 +16,10 @@ import com.julianawl.framework.actor.MyActor
 import com.julianawl.framework.background.Background
 import com.julianawl.framework.model.ActorModel
 import ktx.app.KtxScreen
+import java.io.ByteArrayOutputStream
 
-class SceneScreen() : KtxScreen {
+
+class SceneScreen : KtxScreen {
 
     private val background by lazy {
         val result = Background(FitViewport(width, height))
@@ -26,7 +29,6 @@ class SceneScreen() : KtxScreen {
     private val backgroundTexture by lazy { background.createBackgroundTexture() }
     var width: Float = 0f
     var height: Float = 0f
-    var actionDuration: Float = 0f
     private val actorManager by lazy {
         ActorManager(background)
     }
@@ -46,7 +48,6 @@ class SceneScreen() : KtxScreen {
     }
 
     fun addActorAtPosition(name: String, texture: Texture, position: Vector2) {
-        removeActor(name)
         Gdx.app.postRunnable {
             background.addMyActor(
                 actorManager.addActorWithTexture(
@@ -56,6 +57,7 @@ class SceneScreen() : KtxScreen {
                 )
             )
         }
+        fixActorAtPosition(name)
     }
 
     fun editActor(nameOld: String, name: String, color: Color, shape: String) {
@@ -85,15 +87,15 @@ class SceneScreen() : KtxScreen {
         actor.stopMovement()
     }
 
-    fun playScene() {
+    fun playScene(duration: Float, interpolation: Interpolation) {
         for (actor in background.actors) {
             val myActor = background.root.findActor<MyActor>(actor.name)
             with(myActor) {
                 addAction(
                     actorManager.addMovementAsAction(
                         this,
-                        actionDuration,
-                        Interpolation.linear
+                        duration,
+                        interpolation
                     )
                 )
             }
@@ -115,8 +117,7 @@ class SceneScreen() : KtxScreen {
             sceneActors.add(
                 ActorModel(
                     actor.name,
-                    actor.color,
-                    imageActor?.getTexture(),
+                    convertPixmapToString(imageActor?.getTexture()?.consumePixmap()!!, actor.name),
                     getActorInitialPosition(background.root.findActor(actor.name)),
                     getActorFinalPosition(background.root.findActor(actor.name))
                 )
@@ -125,9 +126,31 @@ class SceneScreen() : KtxScreen {
         return sceneActors
     }
 
+    private fun convertPixmapToString(pixmap: Pixmap, name: String): String? {
+        val image = Gdx.files.local("${name}.png")
+        PixmapIO.writePNG(image, pixmap)
+
+        val bm = BitmapFactory.decodeFile(image.file().absolutePath)
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos)
+
+        val b: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.NO_WRAP)
+    }
+
     private fun getActorInitialPosition(actor: MyActor): Vector2 = actor.initialPosition
 
     private fun getActorFinalPosition(actor: MyActor): Vector2 = actor.finalPosition
+
+    fun setNewScreenActorPosition(actor: String, position: Vector2) {
+        val myActor = background.root?.findActor<MyActor>(actor)
+        actorManager.setActorInitialPosition(myActor!!, position)
+    }
+
+    fun backActorToInitialPosition(actor: String, position: Vector2) {
+        val myActor = background.root?.findActor<MyActor>(actor)
+        actorManager.backActorToInitialPosition(myActor!!, position)
+    }
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0.172f, 0.184f, 0.2f, 1f)
@@ -135,8 +158,8 @@ class SceneScreen() : KtxScreen {
         background.batch.begin()
         background.batch.draw(backgroundTexture, 0f, 0f)
         background.batch.end()
+        Gdx.app.postRunnable { background.act() }
         background.draw()
-        background.act()
     }
 
     override fun dispose() {

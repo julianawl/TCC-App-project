@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,9 +8,9 @@
         android:id="@+id/dialog_new_comp_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Nova Composição"
-        android:textSize="20sp"
         android:layout_margin="16dp"
+        android:text="@string/new_composition_dialog_title"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,9 +18,9 @@
         android:id="@+id/dialog_new_comp_subtitle_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Informe a altura e a largura, em centímetros, do palco"
-        android:textSize="15sp"
         android:layout_marginTop="5dp"
+        android:text="@string/description_new_composition"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@id/dialog_new_comp_title_tv"
         app:layout_constraintTop_toBottomOf="@id/dialog_new_comp_title_tv" />
 
@@ -30,17 +29,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:src="@drawable/ic_baseline_close_24"
         android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_baseline_close_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_new_comp_height_il"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Altura (cm)"
         android:layout_margin="16dp"
+        android:hint="@string/height_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_new_comp_subtitle_tv">
@@ -48,15 +47,17 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_new_comp_height_et"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:imeOptions="actionDone"
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_new_comp_width_il"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Largura (cm)"
         android:layout_margin="16dp"
+        android:hint="@string/width_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_new_comp_height_il">
@@ -64,15 +65,17 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_new_comp_width_et"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:imeOptions="actionDone"
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_new_comp_name_il"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Nome da Composição"
         android:layout_margin="16dp"
+        android:hint="@string/composition_name_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_new_comp_width_il">
@@ -80,7 +83,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_new_comp_name_et"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -88,9 +93,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Criar"
+        android:text="@string/create_add_btn_dialog"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/dialog_new_comp_name_il"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_new_comp_name_il" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.julianawl.testemoov.ui.ActorName
+import com.julianawl.testemoov.data.ActorName
 
 class GetActorsAdapter(
     private val actors: MutableList<ActorName> = mutableListOf(),

@@ -13,7 +13,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Adicionar bailarino"
+            android:text="@string/add_dancer_title_dialog"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:hint="Nome"
+            android:hint="@string/name_hint_dialog"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dialog_add_close_btn">
@@ -49,8 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Cor:"
-            android:textColor="@color/black"
+            android:text="@string/color_hint_dialog"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dialog_add_actor_name_il" />
 
@@ -66,19 +65,19 @@
                 android:id="@+id/dialog_add_color_1_rd_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Azul" />
+                android:text="@string/blue_radio_btn" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/dialog_add_color_2_rd_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vermelho" />
+                android:text="@string/red_radio_btn" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/dialog_add_color_3_rd_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Verde" />
+                android:text="@string/green_radio_btn" />
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
@@ -86,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Adicionar"
+            android:text="@string/add_dialog_btn"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dialog_add_color_rd_gp" />

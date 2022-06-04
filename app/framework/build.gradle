@@ -4,12 +4,8 @@ plugins {
 }
 
 ext {
-    appName = "AndroidLibgdx"
     gdxVersion = '1.11.0'
-    roboVMVersion = '2.3.6'
-    ashleyVersion = '1.7.0'
-    aiVersion = '1.8.0'
-    ktxVersion = '1.11.0-rc1'
+    ktxVersion = '1.11.0-SNAPSHOT'
 }
 
 android {
@@ -79,6 +75,4 @@ dependencies {
     api group: 'io.github.libktx', name: 'ktx-log', version: ktxVersion
     api group: 'io.github.libktx', name: 'ktx-scene2d', version: ktxVersion
 
-    //Gson
-    implementation 'com.google.code.gson:gson:2.8.6'
 }

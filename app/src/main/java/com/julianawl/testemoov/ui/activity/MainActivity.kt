@@ -9,6 +9,7 @@ import com.julianawl.testemoov.databinding.ActivityMainBinding
 import com.julianawl.framework.model.SetModel
 import com.julianawl.framework.model.SceneModel
 import com.julianawl.framework.model.SetList
+import com.julianawl.testemoov.data.ModelPreferencesManager
 import com.julianawl.testemoov.ui.activity.adapter.CompositionsAdapter
 import com.julianawl.testemoov.ui.dialog.NewCompositionDialog
 

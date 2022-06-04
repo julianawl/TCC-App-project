@@ -1,12 +1,17 @@
 package com.julianawl.testemoov.graphics
 
+import android.util.Base64
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Array
 import com.julianawl.framework.model.SceneModel
 import com.julianawl.framework.model.SetList
+import com.julianawl.framework.model.SetModel
 import com.julianawl.framework.screen.SceneScreen
-import com.julianawl.testemoov.ModelPreferencesManager
+import com.julianawl.testemoov.data.ModelPreferencesManager
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 
@@ -47,12 +52,18 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         this.setName = name
     }
 
-    fun setActionDuration() {
-        screen.actionDuration = 1f
-    }
-
     fun setInitialPosition(actorName: String): Int {
         return screen.fixActorAtPosition(actorName)
+    }
+
+    fun setPreferences(prefs: String, id: Int) {
+        this.prefs = prefs
+        this.setId = id
+        val compositions = ModelPreferencesManager.get<SetList>(prefs)?.setList
+        val set = compositions?.find { set -> set.id == id }
+        if (set?.scenes?.isNotEmpty()!!) {
+            buildSet(set)
+        }
     }
 
     fun addMovement(actorName: String) {
@@ -64,22 +75,56 @@ class BaseGameClass : KtxGame<KtxScreen>() {
     }
 
     fun playScene() {
-        screen.playScene()
+        screen.playScene(1f, Interpolation.linear)
     }
 
     fun stopScene() {
         screen.stopScene()
     }
 
-    fun nextScene() {
+    fun nextScene(): Int {
         saveScene()
         scenesCount++
         buildNewScreen()
+        return scenesCount
     }
 
-    fun getPreferences(prefs: String, id: Int) {
-        this.prefs = prefs
-        this.setId = id
+    fun backScene(): Int {
+        if (scenesCount > 0){
+            saveScene()
+            buildPreviousScreen()
+            scenesCount--
+        }
+        return scenesCount
+    }
+
+    private fun buildSet(set: SetModel) {
+        val scene = set.scenes?.first()
+        scene?.actors?.forEach { actor ->
+            screen.addActorAtPosition(
+                actor.name,
+                convertStringToTexture(actor.texture!!),
+                actor.finalPosition!!
+            )
+        }
+    }
+
+    private fun convertStringToTexture(encode: String): Texture {
+        val decodedBytes: ByteArray = Base64.decode(encode, Base64.NO_WRAP)
+        val pixmap: Pixmap = Pixmap(decodedBytes, 0, decodedBytes.size)
+        return Texture(pixmap)
+    }
+
+    private fun buildPreviousScreen() {
+        setScreen<SceneScreen>()
+        if (scenesCount > 1) {
+            val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
+            val scenes = setList?.find { setModel -> setModel.name == setName }?.scenes
+            val previousScene = scenes?.find { sceneModel -> sceneModel.id == scenesCount - 1 }
+            previousScene?.actors?.forEach { actor ->
+                screen.backActorToInitialPosition(actor.name, actor.initialPosition!!)
+            }
+        }
     }
 
     private fun buildNewScreen() {
@@ -88,8 +133,9 @@ class BaseGameClass : KtxGame<KtxScreen>() {
             val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
             val scenes = setList?.find { setModel -> setModel.name == setName }?.scenes
             val lastScene = scenes?.last()
+            screen.playScene(1f, Interpolation.linear)
             lastScene?.actors?.forEach { actor ->
-                screen.addActorAtPosition(actor.name, actor.texture!!, actor.finalPosition!!)
+                screen.setNewScreenActorPosition(actor.name, actor.finalPosition!!)
             }
         }
     }

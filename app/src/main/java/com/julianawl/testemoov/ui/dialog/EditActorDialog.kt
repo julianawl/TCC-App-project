@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.badlogic.gdx.graphics.Color
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.julianawl.testemoov.R
 import com.julianawl.testemoov.databinding.EditActorDialogBinding
 
@@ -25,25 +26,25 @@ class EditActorDialog: DialogFragment() {
     private var listener: EditDialogListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setView(binding.root)
 
-        val actor: String = arguments?.getString("Actor").toString()
+        val actor: String = arguments?.getString(getString(R.string.actor)).toString()
         nameEditText.setText(actor)
 
         this.editBtn.setOnClickListener {
             when {
                 nameEditText.text.toString().isEmpty() -> {
-                    Toast.makeText(requireContext(), "Nome é obrigatório", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), getString(R.string.toast_dialog_add_name_required), Toast.LENGTH_SHORT)
                         .show()
                 }
                 colorRadioGroup.checkedRadioButtonId == View.NO_ID -> {
-                    Toast.makeText(requireContext(), "Cor é obrigatório", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), getString(R.string.toast_dialog_add_color_required), Toast.LENGTH_SHORT)
                         .show()
                 }
                 else -> {
                     this.listener?.onClickEditActor(
-                        actor, nameEditText.text.toString(), onRadioButtonClicked(), "circle")
+                        actor, nameEditText.text.toString(), onRadioButtonClicked(), getString(R.string.shape_actor))
                     dismiss()
                 }
             }

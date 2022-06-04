@@ -52,6 +52,15 @@ class ActorManager(private val background: Background) {
         return Vector2(background.width / 2 - actorSize / 2, background.height / 2 - actorSize / 2)
     }
 
+    fun setActorInitialPosition(myActor: MyActor, position: Vector2) {
+        myActor.initialPosition.set(position.x, position.y)
+    }
+
+    fun backActorToInitialPosition(myActor: MyActor, position: Vector2) {
+        myActor.initialPosition.set(position.x, position.y)
+        myActor.backToInitialPosition()
+    }
+
     fun addActorWithColor(color: Color, shape: String, name: String): MyActor {
         val actorShape = ImageActor(
             actorSize,

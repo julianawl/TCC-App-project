@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.julianawl.testemoov.R
 import com.julianawl.testemoov.databinding.NewCompositionDialogBinding
 
 class NewCompositionDialog : DialogFragment() {
@@ -22,7 +24,7 @@ class NewCompositionDialog : DialogFragment() {
     private var listener: NewCompositionListener? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setView(binding.root)
 
         this.createBtn.setOnClickListener {
@@ -31,20 +33,28 @@ class NewCompositionDialog : DialogFragment() {
                     .isEmpty() && this.nameEditText.text.toString().isEmpty() -> {
                     Toast.makeText(
                         requireContext(),
-                        "Todos os campos são obrigatórios",
+                        getString(R.string.toast_new_comp_required_fields),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
                 this.widthEditText.text.toString().isEmpty() -> {
-                    Toast.makeText(requireContext(), "Informe a largura", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.toast_new_comp_width),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 this.heightEditText.text.toString().isEmpty() -> {
-                    Toast.makeText(requireContext(), "Informe a altura", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.toast_new_comp_height),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 this.nameEditText.text.toString().isEmpty() -> {
                     Toast.makeText(
                         requireContext(),
-                        "Informe um nome para a composição",
+                        getString(R.string.toast_new_comp_name_required),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

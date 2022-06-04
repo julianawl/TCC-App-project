@@ -1,4 +1,4 @@
-package com.julianawl.testemoov
+package com.julianawl.testemoov.data
 
 import android.app.Application
 import android.content.Context

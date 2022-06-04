@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/comp_item_cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,26 +13,22 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/comp_item_title_tv"
+            android:id="@+id/item_title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:fontFamily="sans-serif-black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Amor próprio ou falta dele" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/comp_item_frames_count_tv"
+            android:id="@+id/item_scene_count_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/comp_item_title_tv"
-            app:layout_constraintTop_toBottomOf="@+id/comp_item_title_tv"
-            tools:text="Cenas: 25" />
+            app:layout_constraintStart_toStartOf="@+id/item_title_tv"
+            app:layout_constraintTop_toBottomOf="@+id/item_title_tv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </com.google.android.material.card.MaterialCardView>

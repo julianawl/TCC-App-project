@@ -2,10 +2,10 @@ package com.julianawl.testemoov.ui.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.julianawl.testemoov.ui.ActorName
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.julianawl.testemoov.data.ActorName
 import com.julianawl.testemoov.databinding.GetActorsDialogBinding
 import com.julianawl.testemoov.ui.dialog.adapter.GetActorsAdapter
 
@@ -15,7 +15,7 @@ class GetActorsDialog(private val actors: List<ActorName>) : DialogFragment() {
     var onItemClickListener: (actor: ActorName) -> Unit = {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setView(binding.root)
 
         binding.dialogGetActorsRv.adapter = adapter

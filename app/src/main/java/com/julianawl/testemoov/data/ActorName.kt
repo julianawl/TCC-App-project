@@ -1,4 +1,4 @@
-package com.julianawl.testemoov.ui
+package com.julianawl.testemoov.data
 
 data class ActorName(
     val name: String,

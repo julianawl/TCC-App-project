@@ -36,8 +36,8 @@ class CompositionsAdapter(
 
         private lateinit var composition: SetModel
         private val item = view.findViewById<MaterialCardView>(R.id.comp_item_cv)
-        private val compositionName = view.findViewById<MaterialTextView>(R.id.comp_item_title_tv)
-        private val scenesCount = view.findViewById<MaterialTextView>(R.id.comp_item_frames_count_tv)
+        private val compositionName = view.findViewById<MaterialTextView>(R.id.item_title_tv)
+        private val scenesCount = view.findViewById<MaterialTextView>(R.id.item_scene_count_tv)
         fun bind(composition: SetModel){
             this.composition = composition
             compositionName.text = composition.name
