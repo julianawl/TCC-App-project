@@ -2,8 +2,11 @@ package com.julianawl.framework.screen
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.opengl.GLES20
+import android.opengl.GLUtils
 import android.util.Base64
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Gdx.app
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.Vector2
@@ -36,7 +39,7 @@ class SceneScreen : KtxScreen {
     override fun show() {}
 
     fun addActor(name: String, color: Color, shape: String) {
-        Gdx.app.postRunnable {
+        app.postRunnable {
             background.addMyActor(
                 actorManager.addActorWithColor(
                     color,
@@ -47,21 +50,19 @@ class SceneScreen : KtxScreen {
         }
     }
 
-    fun addActorAtPosition(name: String, texture: Texture, position: Vector2) {
-        Gdx.app.postRunnable {
+    fun addActorAtPosition(name: String, texture: String, position: Vector2) {
+        app.postRunnable {
             background.addMyActor(
                 actorManager.addActorWithTexture(
-                    texture,
-                    name,
-                    position
+                    texture, name, position
                 )
             )
+            fixActorAtPosition(name)
         }
-        fixActorAtPosition(name)
     }
 
     fun editActor(nameOld: String, name: String, color: Color, shape: String) {
-        Gdx.app.postRunnable { actorManager.editActorWithColor(nameOld, name, color, shape) }
+        app.postRunnable { actorManager.editActorWithColor(nameOld, name, color, shape) }
     }
 
     fun removeActor(actor: String) {
@@ -158,7 +159,7 @@ class SceneScreen : KtxScreen {
         background.batch.begin()
         background.batch.draw(backgroundTexture, 0f, 0f)
         background.batch.end()
-        Gdx.app.postRunnable { background.act() }
+        app.postRunnable { background.act() }
         background.draw()
     }
 

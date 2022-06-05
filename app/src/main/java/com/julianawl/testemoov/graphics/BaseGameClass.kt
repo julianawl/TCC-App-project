@@ -1,9 +1,6 @@
 package com.julianawl.testemoov.graphics
 
-import android.util.Base64
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.Pixmap
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.utils.Array
@@ -25,6 +22,11 @@ class BaseGameClass : KtxGame<KtxScreen>() {
     override fun create() {
         addScreen(screen)
         setScreen<SceneScreen>()
+        val compositions = ModelPreferencesManager.get<SetList>(prefs)?.setList
+        val set = compositions?.find { set -> set.id == setId }
+        if (set?.scenes?.isNotEmpty()!!) {
+            buildSet(set)
+        }
     }
 
     fun addActor(name: String, color: Color, shape: String) {
@@ -59,11 +61,6 @@ class BaseGameClass : KtxGame<KtxScreen>() {
     fun setPreferences(prefs: String, id: Int) {
         this.prefs = prefs
         this.setId = id
-        val compositions = ModelPreferencesManager.get<SetList>(prefs)?.setList
-        val set = compositions?.find { set -> set.id == id }
-        if (set?.scenes?.isNotEmpty()!!) {
-            buildSet(set)
-        }
     }
 
     fun addMovement(actorName: String) {
@@ -90,7 +87,7 @@ class BaseGameClass : KtxGame<KtxScreen>() {
     }
 
     fun backScene(): Int {
-        if (scenesCount > 0){
+        if (scenesCount > 0) {
             saveScene()
             buildPreviousScreen()
             scenesCount--
@@ -103,16 +100,10 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         scene?.actors?.forEach { actor ->
             screen.addActorAtPosition(
                 actor.name,
-                convertStringToTexture(actor.texture!!),
+                actor.texture!!,
                 actor.finalPosition!!
             )
         }
-    }
-
-    private fun convertStringToTexture(encode: String): Texture {
-        val decodedBytes: ByteArray = Base64.decode(encode, Base64.NO_WRAP)
-        val pixmap: Pixmap = Pixmap(decodedBytes, 0, decodedBytes.size)
-        return Texture(pixmap)
     }
 
     private fun buildPreviousScreen() {

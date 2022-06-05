@@ -1,5 +1,6 @@
 package com.julianawl.framework.actor
 
+import android.util.Base64
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
@@ -45,6 +46,12 @@ class ActorManager(private val background: Background) {
                 Pixmap.Format.RGBA8888
             )
         }
+        return Texture(pixmap)
+    }
+
+    private fun convertStringToTexture(encode: String): Texture {
+        val decodedBytes: ByteArray = Base64.decode(encode, Base64.NO_WRAP)
+        val pixmap = Pixmap(decodedBytes, 0, decodedBytes.size)
         return Texture(pixmap)
     }
 
@@ -116,8 +123,8 @@ class ActorManager(private val background: Background) {
         return actor
     }
 
-    fun addActorWithTexture(texture: Texture, name: String, position: Vector2): MyActor {
-        val actorShape = ImageActor(actorSize, actorSize, texture)
+    fun addActorWithTexture(texture: String, name: String, position: Vector2): MyActor {
+        val actorShape = ImageActor(actorSize, actorSize, convertStringToTexture(texture))
         actorShape.name = "$name Image"
         val font = BitmapFont(Gdx.files.internal("fonts/roboto_med_italic.fnt"))
         val actorLabel = Label(
