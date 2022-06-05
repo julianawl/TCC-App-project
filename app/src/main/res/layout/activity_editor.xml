@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.CompositionActivity">
+    tools:context=".ui.activity.EditorActivity">
 
     <FrameLayout
-        android:id="@+id/composition_view"
+        android:id="@+id/editor_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/frame_layout_background"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_add_actor_btn"
+        android:id="@+id/editor_add_actor_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_edit_actor_btn"
+        android:id="@+id/editor_edit_actor_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -36,10 +36,10 @@
         android:src="@drawable/ic_baseline_edit_24"
         android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composition_add_actor_btn" />
+        app:layout_constraintStart_toEndOf="@id/editor_add_actor_btn" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_fix_actors_btn"
+        android:id="@+id/editor_fix_actors_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -47,10 +47,10 @@
         android:src="@drawable/ic_baseline_push_pin_24"
         android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composition_edit_actor_btn" />
+        app:layout_constraintStart_toEndOf="@id/editor_edit_actor_btn" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_stop_move_btn"
+        android:id="@+id/editor_stop_move_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -58,11 +58,11 @@
         android:src="@drawable/ic_baseline_stop_24"
         android:tint="@android:color/holo_red_light"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/composition_add_move_btn"
-        app:layout_constraintStart_toEndOf="@id/composition_fix_actors_btn" />
+        app:layout_constraintBottom_toTopOf="@id/editor_add_move_btn"
+        app:layout_constraintStart_toEndOf="@id/editor_fix_actors_btn" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_add_move_btn"
+        android:id="@+id/editor_add_move_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -70,10 +70,10 @@
         android:src="@drawable/ic_baseline_north_east_24"
         android:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/composition_fix_actors_btn" />
+        app:layout_constraintStart_toEndOf="@id/editor_fix_actors_btn" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_save_btn"
+        android:id="@+id/editor_save_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -84,7 +84,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_play_scene_btn"
+        android:id="@+id/editor_play_scene_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_pause_scene_btn"
+        android:id="@+id/editor_pause_scene_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -107,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_back_scene_btn"
+        android:id="@+id/editor_back_scene_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -118,23 +118,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/composition_next_scene_btn"
+        android:id="@+id/editor_next_scene_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_baseline_arrow_forward_24"
         android:tint="@color/white"
-        app:layout_constraintStart_toEndOf="@id/composition_back_scene_btn"
+        app:layout_constraintStart_toEndOf="@id/editor_back_scene_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/composition_scene_count_tv"
+        android:id="@+id/editor_scene_count_tv"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="12dp"
         android:layout_width="48dp"
+        android:text="@string/one"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/composition_next_scene_btn"
+        app:layout_constraintStart_toEndOf="@id/editor_next_scene_btn"
         app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/white"
         android:textAlignment="center"

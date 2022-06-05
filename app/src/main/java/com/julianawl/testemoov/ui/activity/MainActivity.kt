@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
                     createNewComposition(width, height, name, id)
 
-                    val intent = Intent(this@MainActivity, CompositionActivity::class.java)
+                    val intent = Intent(this@MainActivity, EditorActivity::class.java)
                     intent.putExtra(WIDTH_KEY, width)
                     intent.putExtra(HEIGHT_KEY, height)
                     intent.putExtra(NAME_KEY, name)
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         if(compositions != null){
             adapter.update(compositions.setList as List<SetModel>)
             adapter.onCompositionClickListener = {
-                val intent = Intent(this@MainActivity, CompositionActivity::class.java)
+                val intent = Intent(this@MainActivity, ViewActivity::class.java)
                 intent.putExtra(WIDTH_KEY, it.stageWidth)
                 intent.putExtra(HEIGHT_KEY, it.stageHeight)
                 intent.putExtra(NAME_KEY, it.name)

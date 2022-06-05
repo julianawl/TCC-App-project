@@ -30,18 +30,4 @@ class Background(
     fun addMyActor(actor: MyActor) {
         root.addActor(actor)
     }
-
-//    private fun drawGrid(pixmap: Pixmap): Pixmap {
-//        pixmap.setColor(Color.WHITE)
-//        pixmap.drawRectangle(0, 0, width.toInt(), height.toInt())
-//        val cellSize = 25
-//        val mapGrid = Array(width.toInt()) { IntArray(height.toInt()) }
-//        for (x in mapGrid.indices) {
-//            for (y in 0 until mapGrid[x].size) {
-//                pixmap.drawLine(x * cellSize, 0, x * cellSize, y * cellSize)
-//                pixmap.drawLine(0, y * cellSize, x * cellSize, y * cellSize)
-//            }
-//        }
-//        return pixmap
-//    }
 }

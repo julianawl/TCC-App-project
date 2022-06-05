@@ -12,21 +12,51 @@ import com.julianawl.testemoov.data.ModelPreferencesManager
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 
-class BaseGameClass : KtxGame<KtxScreen>() {
+class BaseGraphicClass : KtxGame<KtxScreen>() {
     private val screen = SceneScreen()
+
     private var scenesCount = 1
+    private var scenesPage = 1
+
     private lateinit var setName: String
     private lateinit var prefs: String
     private var setId: Int = 0
 
     override fun create() {
         addScreen(screen)
-        setScreen<SceneScreen>()
         val compositions = ModelPreferencesManager.get<SetList>(prefs)?.setList
         val set = compositions?.find { set -> set.id == setId }
         if (set?.scenes?.isNotEmpty()!!) {
-            buildSet(set)
+            setScreen<SceneScreen>()
+            buildViewScreen(set)
+        } else {
+            setScreen<SceneScreen>()
         }
+    }
+
+    private fun buildViewScreen(set: SetModel) {
+        val scene = set.scenes?.first()
+        scene?.actors?.forEach { actor ->
+            screen.addActorAtPosition(
+                actor.name,
+                actor.texture!!,
+                actor.finalPosition!!
+            )
+        }
+    }
+
+    fun setDimensions(width: Float, height: Float) {
+        screen.width = width
+        screen.height = height
+    }
+
+    fun setCompositionName(name: String) {
+        this.setName = name
+    }
+
+    fun setPreferences(prefs: String, id: Int) {
+        this.prefs = prefs
+        this.setId = id
     }
 
     fun addActor(name: String, color: Color, shape: String) {
@@ -45,22 +75,8 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         return screen.getActors()
     }
 
-    fun setDimensions(width: Float, height: Float) {
-        screen.width = width
-        screen.height = height
-    }
-
-    fun setCompositionName(name: String) {
-        this.setName = name
-    }
-
-    fun setInitialPosition(actorName: String): Int {
+    fun fixActorAtPosition(actorName: String): Int {
         return screen.fixActorAtPosition(actorName)
-    }
-
-    fun setPreferences(prefs: String, id: Int) {
-        this.prefs = prefs
-        this.setId = id
     }
 
     fun addMovement(actorName: String) {
@@ -79,34 +95,41 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         screen.stopScene()
     }
 
-    fun nextScene(): Int {
+    fun nextEditorScene(): Int {
         saveScene()
         scenesCount++
-        buildNewScreen()
+        buildNewEditorScreen()
         return scenesCount
     }
 
-    fun backScene(): Int {
+    fun backEditorScene(): Int {
         if (scenesCount > 0) {
             saveScene()
-            buildPreviousScreen()
+            buildPreviousEditorScreen()
             scenesCount--
         }
         return scenesCount
     }
 
-    private fun buildSet(set: SetModel) {
-        val scene = set.scenes?.first()
-        scene?.actors?.forEach { actor ->
-            screen.addActorAtPosition(
-                actor.name,
-                actor.texture!!,
-                actor.finalPosition!!
-            )
+    fun nextViewScene(): Int {
+        val compositions = ModelPreferencesManager.get<SetList>(prefs)?.setList
+        val set = compositions?.find { set -> set.id == setId }
+        if(scenesPage != set?.scenes?.size!!) {
+            scenesPage++
+            buildNewViewScreen()
         }
+        return scenesPage
     }
 
-    private fun buildPreviousScreen() {
+    fun backViewScene(): Int {
+        if(scenesPage > 1){
+            buildPreviousViewScreen()
+            scenesPage--
+        }
+        return scenesPage
+    }
+
+    private fun buildPreviousEditorScreen() {
         setScreen<SceneScreen>()
         if (scenesCount > 1) {
             val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
@@ -118,9 +141,34 @@ class BaseGameClass : KtxGame<KtxScreen>() {
         }
     }
 
-    private fun buildNewScreen() {
+    private fun buildPreviousViewScreen() {
+        setScreen<SceneScreen>()
+        if (scenesPage > 1) {
+            val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
+            val scenes = setList?.find { setModel -> setModel.name == setName }?.scenes
+            val previousScene = scenes?.find { sceneModel -> sceneModel.id == scenesCount - 1 }
+            previousScene?.actors?.forEach { actor ->
+                screen.backActorToInitialPosition(actor.name, actor.initialPosition!!)
+            }
+        }
+    }
+
+    private fun buildNewEditorScreen() {
         setScreen<SceneScreen>()
         if (scenesCount > 1) {
+            val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
+            val scenes = setList?.find { setModel -> setModel.name == setName }?.scenes
+            val lastScene = scenes?.last()
+            screen.playScene(1f, Interpolation.linear)
+            lastScene?.actors?.forEach { actor ->
+                screen.setNewScreenActorPosition(actor.name, actor.finalPosition!!)
+            }
+        }
+    }
+
+    private fun buildNewViewScreen() {
+        setScreen<SceneScreen>()
+        if (scenesPage > 1) {
             val setList = ModelPreferencesManager.get<SetList>(prefs)?.setList
             val scenes = setList?.find { setModel -> setModel.name == setName }?.scenes
             val lastScene = scenes?.last()

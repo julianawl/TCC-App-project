@@ -1,9 +1,12 @@
 package com.julianawl.framework.actor
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Base64
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.PixmapIO
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Interpolation
@@ -14,15 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.julianawl.framework.background.Background
+import java.io.ByteArrayOutputStream
 
-class ActorManager(private val background: Background) {
-
-    private val actorSize = 100f
+class ActorManager(private val background: Background, private val actorSize: Float) {
 
     private fun createActorTexture(color: Color, shape: String): Texture {
         val pixmap: Pixmap
         when (shape) {
-            "rectangle" -> {
+            RECTANGLE_SHAPE -> {
                 pixmap = Pixmap(
                     actorSize.toInt(),
                     actorSize.toInt(),
@@ -31,7 +33,7 @@ class ActorManager(private val background: Background) {
                 pixmap.setColor(color)
                 pixmap.fillRectangle(0, 0, background.width.toInt(), background.height.toInt())
             }
-            "circle" -> {
+            CIRCLE_SHAPE -> {
                 pixmap = Pixmap(
                     actorSize.toInt() * 2,
                     actorSize.toInt() * 2,
@@ -47,6 +49,20 @@ class ActorManager(private val background: Background) {
             )
         }
         return Texture(pixmap)
+    }
+
+    fun convertPixmapToString(pixmap: Pixmap, name: String): String? {
+        val image = Gdx.files.local("${name}.png")
+        PixmapIO.writePNG(image, pixmap)
+
+        val bm = BitmapFactory.decodeFile(image.file().absolutePath)
+        val baos = ByteArrayOutputStream()
+
+        image.delete()
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos)
+
+        val b: ByteArray = baos.toByteArray()
+        return Base64.encodeToString(b, Base64.NO_WRAP)
     }
 
     private fun convertStringToTexture(encode: String): Texture {
@@ -167,6 +183,11 @@ class ActorManager(private val background: Background) {
         action.duration = duration
         action.interpolation = interpolation
         return action
+    }
+
+    companion object{
+        const val RECTANGLE_SHAPE = "rectangle"
+        const val CIRCLE_SHAPE = "circle"
     }
 
 }

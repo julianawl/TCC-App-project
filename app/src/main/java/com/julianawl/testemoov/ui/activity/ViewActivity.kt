@@ -1,24 +1,24 @@
 package com.julianawl.testemoov.ui.activity
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.julianawl.testemoov.*
-import com.julianawl.testemoov.databinding.ActivityCompositionBinding
-import com.julianawl.testemoov.ui.fragment.CompositionFragment
+import com.julianawl.testemoov.databinding.ActivityViewBinding
+import com.julianawl.testemoov.ui.fragment.EditorFragment
+import com.julianawl.testemoov.ui.fragment.ViewFragment
 
-class CompositionActivity : AppCompatActivity(), AndroidFragmentApplication.Callbacks {
+class ViewActivity : AppCompatActivity(), AndroidFragmentApplication.Callbacks {
 
     private val binding by lazy {
-        ActivityCompositionBinding.inflate(layoutInflater)
+        ActivityViewBinding.inflate(layoutInflater)
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val libgdxFragment = CompositionFragment()
+        val libgdxFragment = ViewFragment()
         val width = intent.getFloatExtra(WIDTH_KEY, 0f)
         val height = intent.getFloatExtra(HEIGHT_KEY, 0f)
         val name = intent.getStringExtra(NAME_KEY)
@@ -29,7 +29,7 @@ class CompositionActivity : AppCompatActivity(), AndroidFragmentApplication.Call
                 PREFERENCES_KEY, prefs
             ), Pair(ID_KEY, compositionId)
         )
-        supportFragmentManager.beginTransaction().add(R.id.composition_view, libgdxFragment)
+        supportFragmentManager.beginTransaction().add(R.id.view_frame_layout, libgdxFragment)
             .commit()
     }
 

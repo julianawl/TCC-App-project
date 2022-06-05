@@ -14,18 +14,23 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
 import com.julianawl.testemoov.*
 import com.julianawl.testemoov.data.ActorName
-import com.julianawl.testemoov.graphics.BaseGameClass
+import com.julianawl.testemoov.graphics.BaseGraphicClass
 import com.julianawl.testemoov.ui.activity.MainActivity
 import com.julianawl.testemoov.ui.dialog.AddActorDialog
 import com.julianawl.testemoov.ui.dialog.EditActorDialog
 import com.julianawl.testemoov.ui.dialog.GetActorsDialog
 
-class CompositionFragment : AndroidFragmentApplication() {
-
-    private val base = BaseGameClass()
+class EditorFragment : AndroidFragmentApplication() {
+    private val base = BaseGraphicClass()
     private var addActorDialog: AddActorDialog? = null
     private var editActorDialog: EditActorDialog? = null
     private var getActorsDialog: GetActorsDialog? = null
+
+    private var width = 0f
+    private var height = 0f
+    private var name: String? = null
+    private var prefs: String? = null
+    private var compositionId = 0
 
     private var fixed: Int = -1
 
@@ -34,36 +39,39 @@ class CompositionFragment : AndroidFragmentApplication() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val width = arguments?.getFloat(WIDTH_KEY)!!
-        val height = arguments?.getFloat(HEIGHT_KEY)!!
-        val name = arguments?.getString(NAME_KEY)!!
-        val prefs = arguments?.getString(PREFERENCES_KEY)!!
-        val compositionId = arguments?.getInt(ID_KEY)!!
+        arguments?.let {
+            width = it.getFloat(WIDTH_KEY)
+            height = it.getFloat(HEIGHT_KEY)
+            name = it.getString(NAME_KEY)
+            prefs = it.getString(PREFERENCES_KEY)
+            compositionId = it.getInt(ID_KEY)
+        }
+
         return initializeForView(base.also {
             it.setDimensions(width, height)
-            it.setCompositionName(name)
-            it.setPreferences(prefs, compositionId)
+            it.setCompositionName(name!!)
+            it.setPreferences(prefs!!, compositionId)
         })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val addBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_add_actor_btn)
+        val addBtn = activity?.findViewById<AppCompatImageButton>(R.id.editor_add_actor_btn)
         val editActorBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_edit_actor_btn)
+            activity?.findViewById<AppCompatImageButton>(R.id.editor_edit_actor_btn)
         val fixActorBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_fix_actors_btn)
+            activity?.findViewById<AppCompatImageButton>(R.id.editor_fix_actors_btn)
         val moveActorBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_add_move_btn)
-        val playBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_play_scene_btn)
+            activity?.findViewById<AppCompatImageButton>(R.id.editor_add_move_btn)
+        val playBtn = activity?.findViewById<AppCompatImageButton>(R.id.editor_play_scene_btn)
         val pauseBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_pause_scene_btn)
-        val sceneCountTv = activity?.findViewById<MaterialTextView>(R.id.composition_scene_count_tv)
+            activity?.findViewById<AppCompatImageButton>(R.id.editor_pause_scene_btn)
+        val sceneCountTv = activity?.findViewById<MaterialTextView>(R.id.editor_scene_count_tv)
         val backSceneBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_back_scene_btn)
+            activity?.findViewById<AppCompatImageButton>(R.id.editor_back_scene_btn)
         val nextSceneBtn =
-            activity?.findViewById<AppCompatImageButton>(R.id.composition_next_scene_btn)
-        val saveBtn = activity?.findViewById<AppCompatImageButton>(R.id.composition_save_btn)
+            activity?.findViewById<AppCompatImageButton>(R.id.editor_next_scene_btn)
+        val saveBtn = activity?.findViewById<AppCompatImageButton>(R.id.editor_save_btn)
 
         onClickAddBtn(addBtn!!)
         onClickEditBtn(editActorBtn!!)
@@ -81,7 +89,7 @@ class CompositionFragment : AndroidFragmentApplication() {
             dialog.setMessage(getString(R.string.dialog_save_message))
                 .setTitle(getString(R.string.dialog_save_title))
                 .setPositiveButton(getString(R.string.dialog_save_btn)) { _, _ ->
-                    base.nextScene()
+                    base.nextEditorScene()
                     val intent = Intent(activity, MainActivity::class.java)
                     startActivity(intent)
                 }
@@ -97,7 +105,7 @@ class CompositionFragment : AndroidFragmentApplication() {
         sceneCountTv: MaterialTextView
     ) {
         backSceneBtn.setOnClickListener {
-            val sceneCount = base.backScene()
+            val sceneCount = base.backEditorScene()
             sceneCountTv.text = sceneCount.toString()
             if (sceneCount <= 1) Toast.makeText(
                 requireContext(),
@@ -116,7 +124,7 @@ class CompositionFragment : AndroidFragmentApplication() {
             dialog.setMessage(getString(R.string.dialog_next_scene_message))
                 .setTitle(getString(R.string.new_scene_dialog_title))
                 .setPositiveButton(getString(R.string.create_add_btn_dialog)) { _, _ ->
-                    val sceneCount = base.nextScene()
+                    val sceneCount = base.nextEditorScene()
                     sceneCountTv.text = sceneCount.toString()
                 }
                 .setNegativeButton(getString(R.string.dialog_cancel_btn)) { dialogInterface, _ ->
@@ -129,7 +137,7 @@ class CompositionFragment : AndroidFragmentApplication() {
     private fun onClickAddMoveBtn(moveActorBtn: AppCompatImageButton) {
         moveActorBtn.setOnClickListener {
             val stopMoveBtn =
-                activity?.findViewById<AppCompatImageButton>(R.id.composition_stop_move_btn)
+                activity?.findViewById<AppCompatImageButton>(R.id.editor_stop_move_btn)
             activity?.let {
                 getActorsDialog = GetActorsDialog(getActorsList())
                 getActorsDialog?.show(
@@ -158,7 +166,7 @@ class CompositionFragment : AndroidFragmentApplication() {
                     getString(R.string.get_actors_dialog_tag)
                 )
                 getActorsDialog?.onItemClickListener = { actor ->
-                    fixed = base.setInitialPosition(actor.name)
+                    fixed = base.fixActorAtPosition(actor.name)
                     getActorsDialog?.dismiss()
                 }
             }
